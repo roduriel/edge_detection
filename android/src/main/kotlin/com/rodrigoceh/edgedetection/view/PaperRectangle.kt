@@ -1,4 +1,4 @@
-package com.sample.edgedetection.view
+package com.rodrigoceh.edgedetection.view
 
 import android.content.Context
 import android.graphics.*
@@ -6,8 +6,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.sample.edgedetection.processor.Corners
-import com.sample.edgedetection.processor.TAG
+import com.rodrigoceh.edgedetection.processor.Corners
+import com.rodrigoceh.edgedetection.processor.TAG
 import org.opencv.core.Point
 import org.opencv.core.Size
 import kotlin.math.abs

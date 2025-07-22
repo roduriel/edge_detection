@@ -1,16 +1,16 @@
-package com.sample.edgedetection.crop
+package com.rodrigoceh.edgedetection.crop
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.sample.edgedetection.EdgeDetectionHandler
-import com.sample.edgedetection.SourceManager
-import com.sample.edgedetection.processor.Corners
-import com.sample.edgedetection.processor.TAG
-import com.sample.edgedetection.processor.cropPicture
-import com.sample.edgedetection.processor.enhancePicture
+import com.rodrigoceh.edgedetection.EdgeDetectionHandler
+import com.rodrigoceh.edgedetection.SourceManager
+import com.rodrigoceh.edgedetection.processor.Corners
+import com.rodrigoceh.edgedetection.processor.TAG
+import com.rodrigoceh.edgedetection.processor.cropPicture
+import com.rodrigoceh.edgedetection.processor.enhancePicture
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

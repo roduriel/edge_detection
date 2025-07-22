@@ -1,4 +1,4 @@
-package com.sample.edgedetection
+package com.rodrigoceh.edgedetection
 
 
 import android.os.Bundle

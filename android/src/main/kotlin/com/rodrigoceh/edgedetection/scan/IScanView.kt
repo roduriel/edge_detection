@@ -1,8 +1,8 @@
-package com.sample.edgedetection.scan
+package com.rodrigoceh.edgedetection.scan
 
 import android.view.Display
 import android.view.SurfaceView
-import com.sample.edgedetection.view.PaperRectangle
+import com.rodrigoceh.edgedetection.view.PaperRectangle
 
 interface IScanView {
     interface Proxy {

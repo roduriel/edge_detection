@@ -1,4 +1,4 @@
-package com.sample.edgedetection.scan
+package com.rodrigoceh.edgedetection.scan
 
 import android.app.Activity
 import android.content.Intent
@@ -12,12 +12,12 @@ import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.exifinterface.media.ExifInterface
-import com.sample.edgedetection.ERROR_CODE
-import com.sample.edgedetection.EdgeDetectionHandler
-import com.sample.edgedetection.R
-import com.sample.edgedetection.REQUEST_CODE
-import com.sample.edgedetection.base.BaseActivity
-import com.sample.edgedetection.view.PaperRectangle
+import com.rodrigoceh.edgedetection.ERROR_CODE
+import com.rodrigoceh.edgedetection.EdgeDetectionHandler
+import com.rodrigoceh.edgedetection.R
+import com.rodrigoceh.edgedetection.REQUEST_CODE
+import com.rodrigoceh.edgedetection.base.BaseActivity
+import com.rodrigoceh.edgedetection.view.PaperRectangle
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.Core
 import org.opencv.core.CvType

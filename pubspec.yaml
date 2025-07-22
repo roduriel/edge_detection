@@ -27,7 +27,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.sample.edgedetection
+        package: com.rodrigoceh.edgedetection
         pluginClass: EdgeDetectionPlugin
       ios:
         pluginClass: EdgeDetectionPlugin

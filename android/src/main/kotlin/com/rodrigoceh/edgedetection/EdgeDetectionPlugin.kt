@@ -1,9 +1,9 @@
-package com.sample.edgedetection
+package com.rodrigoceh.edgedetection
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.sample.edgedetection.scan.ScanActivity
+import com.rodrigoceh.edgedetection.scan.ScanActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware

@@ -1,4 +1,4 @@
-package com.sample.edgedetection.scan
+package com.rodrigoceh.edgedetection.scan
 
 import org.opencv.core.Size
 

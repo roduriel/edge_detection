@@ -1,4 +1,4 @@
-package com.sample.edgedetection.scan
+package com.rodrigoceh.edgedetection.scan
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -18,12 +18,12 @@ import android.util.Log
 import android.view.Display
 import android.view.SurfaceHolder
 import android.widget.Toast
-import com.sample.edgedetection.EdgeDetectionHandler
-import com.sample.edgedetection.REQUEST_CODE
-import com.sample.edgedetection.SourceManager
-import com.sample.edgedetection.crop.CropActivity
-import com.sample.edgedetection.processor.Corners
-import com.sample.edgedetection.processor.processPicture
+import com.rodrigoceh.edgedetection.EdgeDetectionHandler
+import com.rodrigoceh.edgedetection.REQUEST_CODE
+import com.rodrigoceh.edgedetection.SourceManager
+import com.rodrigoceh.edgedetection.crop.CropActivity
+import com.rodrigoceh.edgedetection.processor.Corners
+import com.rodrigoceh.edgedetection.processor.processPicture
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers

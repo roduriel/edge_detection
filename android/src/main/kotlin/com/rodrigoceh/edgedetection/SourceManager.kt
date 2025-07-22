@@ -1,7 +1,7 @@
-package com.sample.edgedetection
+package com.rodrigoceh.edgedetection
 
 
-import com.sample.edgedetection.processor.Corners
+import com.rodrigoceh.edgedetection.processor.Corners
 import org.opencv.core.Mat
 
 class SourceManager {

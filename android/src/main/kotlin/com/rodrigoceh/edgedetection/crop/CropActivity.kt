@@ -1,4 +1,4 @@
-package com.sample.edgedetection.crop
+package com.rodrigoceh.edgedetection.crop
 
 import android.app.Activity
 import android.os.Bundle
@@ -7,10 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import com.sample.edgedetection.EdgeDetectionHandler
-import com.sample.edgedetection.R
-import com.sample.edgedetection.base.BaseActivity
-import com.sample.edgedetection.view.PaperRectangle
+import com.rodrigoceh.edgedetection.EdgeDetectionHandler
+import com.rodrigoceh.edgedetection.R
+import com.rodrigoceh.edgedetection.base.BaseActivity
+import com.rodrigoceh.edgedetection.view.PaperRectangle
 
 class CropActivity : BaseActivity(), ICropView.Proxy {
 

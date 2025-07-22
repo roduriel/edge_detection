@@ -1,7 +1,7 @@
-package com.sample.edgedetection.crop
+package com.rodrigoceh.edgedetection.crop
 
 import android.widget.ImageView
-import com.sample.edgedetection.view.PaperRectangle
+import com.rodrigoceh.edgedetection.view.PaperRectangle
 
 
 /**
