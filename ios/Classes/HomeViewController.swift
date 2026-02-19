@@ -10,6 +10,9 @@ class HomeViewController: UIViewController, ImageScannerControllerDelegate {
     var saveTo: String = ""
     var canUseGallery: Bool = true
     
+    /// Timer to hide gallery button only when WeScan is on Review screen (avoids overlap with Done/back).
+    private var galleryVisibilityTimer: Timer?
+    
     override func viewDidAppear(_ animated: Bool) {
         if self.isBeingPresented {
             cameraController = ImageScannerController()
@@ -39,18 +42,49 @@ class HomeViewController: UIViewController, ImageScannerControllerDelegate {
             }
             
             present(cameraController, animated: true) {
-                if let window = UIApplication.shared.keyWindow {
+                if let window = SwiftEdgeDetectionPlugin.keyWindow {
                     window.addSubview(self.selectPhotoButton)
-                    self.setupConstraints()
+                    self.setupConstraints(for: window)
+                    self.startGalleryVisibilityUpdates()
                 }
             }
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        galleryVisibilityTimer?.invalidate()
+        galleryVisibilityTimer = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if (canUseGallery == true) {
             selectPhotoButton.isHidden = false
         }
+    }
+    
+    /// Hide gallery button only on Review screen; show on Scan and Edit.
+    private func startGalleryVisibilityUpdates() {
+        galleryVisibilityTimer?.invalidate()
+        galleryVisibilityTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+            self?.updateGalleryButtonVisibility()
+        }
+        RunLoop.main.add(galleryVisibilityTimer!, forMode: .common)
+    }
+    
+    private func updateGalleryButtonVisibility() {
+        guard canUseGallery else {
+            selectPhotoButton.isHidden = true
+            return
+        }
+        let isOnReviewScreen: Bool
+        if let nav = cameraController as? UINavigationController, let top = nav.topViewController {
+            let name = String(describing: type(of: top))
+            isOnReviewScreen = name.contains("ReviewViewController")
+        } else {
+            isOnReviewScreen = false
+        }
+        selectPhotoButton.isHidden = isOnReviewScreen
     }
     
     lazy var selectPhotoButton: UIButton = {
@@ -72,8 +106,8 @@ class HomeViewController: UIViewController, ImageScannerControllerDelegate {
     }
     
     @objc func selectPhoto() {
-        if let window = UIApplication.shared.keyWindow {
-            window.rootViewController?.dismiss(animated: true, completion: nil)
+        if let window = SwiftEdgeDetectionPlugin.keyWindow, let root = window.rootViewController {
+            root.dismiss(animated: true, completion: nil)
             self.hideButtons()
             
             let scanPhotoVC = ScanPhotoViewController()
@@ -83,33 +117,34 @@ class HomeViewController: UIViewController, ImageScannerControllerDelegate {
                 scanPhotoVC.isModalInPresentation = true
                 scanPhotoVC.overrideUserInterfaceStyle = .dark
             }
-            window.rootViewController?.present(scanPhotoVC, animated: true)
+            root.present(scanPhotoVC, animated: true)
         }
     }
     
     func hideButtons() {
+        galleryVisibilityTimer?.invalidate()
+        galleryVisibilityTimer = nil
         selectPhotoButton.isHidden = true
     }
     
-    private func setupConstraints() {
-        var selectPhotoButtonConstraints = [NSLayoutConstraint]()
-        
+    /// Gallery button: bottom-right (hidden in Review by timer). Scan/Edit: no toolbar on right at bottom.
+    private func setupConstraints(for window: UIWindow) {
+        var constraints = [
+            selectPhotoButton.widthAnchor.constraint(equalToConstant: 44.0),
+            selectPhotoButton.heightAnchor.constraint(equalToConstant: 44.0),
+        ]
         if #available(iOS 11.0, *) {
-            selectPhotoButtonConstraints = [
-                selectPhotoButton.widthAnchor.constraint(equalToConstant: 44.0),
-                selectPhotoButton.heightAnchor.constraint(equalToConstant: 44.0),
-                selectPhotoButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -24.0),
-                view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: (65.0 / 2) - 10.0)
+            constraints += [
+                selectPhotoButton.rightAnchor.constraint(equalTo: window.safeAreaLayoutGuide.rightAnchor, constant: -24.0),
+                window.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: (65.0 / 2) - 10.0),
             ]
         } else {
-            selectPhotoButtonConstraints = [
-                selectPhotoButton.widthAnchor.constraint(equalToConstant: 44.0),
-                selectPhotoButton.heightAnchor.constraint(equalToConstant: 44.0),
-                selectPhotoButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -24.0),
-                view.bottomAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: (65.0 / 2) - 10.0)
+            constraints += [
+                selectPhotoButton.rightAnchor.constraint(equalTo: window.rightAnchor, constant: -24.0),
+                window.bottomAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: (65.0 / 2) - 10.0),
             ]
         }
-        NSLayoutConstraint.activate(selectPhotoButtonConstraints)
+        NSLayoutConstraint.activate(constraints)
     }
     
     func setParams(saveTo: String, canUseGallery: Bool) {
@@ -144,36 +179,28 @@ class HomeViewController: UIViewController, ImageScannerControllerDelegate {
     }
     
     func saveImage(image: UIImage) -> Bool? {
-        
         guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
             return false
         }
-        
-        let path : String = "file://" + self.saveTo.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
-        let filePath: URL = URL.init(string: path)!
-        
+        let pathString = self.saveTo.trimmingCharacters(in: .whitespacesAndNewlines)
+        let filePath = URL(fileURLWithPath: pathString)
+        let dirPath = filePath.deletingLastPathComponent().path
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: dirPath) {
+            try? fileManager.createDirectory(atPath: dirPath, withIntermediateDirectories: true, attributes: nil)
+        }
         do {
-            let fileManager = FileManager.default
-            // Check if file exists
-            if fileManager.fileExists(atPath: filePath.path) {
-                // Delete file
-                try fileManager.removeItem(atPath: filePath.path)
+            if fileManager.fileExists(atPath: pathString) {
+                try fileManager.removeItem(atPath: pathString)
             }
-            else {
-                print("File does not exist")
-            }
+        } catch {
+            print("saveImage removeItem error: \(error)")
         }
-        catch let error as NSError {
-            print("An error took place: \(error)")
-        }
-        
         do {
             try data.write(to: filePath)
             return true
-        }
-        
-        catch {
-            print(error.localizedDescription)
+        } catch {
+            print("saveImage write error: \(error.localizedDescription)")
             return false
         }
     }

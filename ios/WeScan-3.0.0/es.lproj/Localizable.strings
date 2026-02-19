@@ -1,0 +1,7 @@
+/* WeScan - Spanish at pod root so bundle gets es.lproj at resource root */
+"wescan.edit.button.next" = "Siguiente";
+"wescan.edit.title" = "Editar Escaneo";
+"wescan.review.title" = "Revisión";
+"wescan.scanning.cancel" = "Cancelar";
+"wescan.scanning.auto" = "Automático";
+"wescan.scanning.manual" = "Manual";

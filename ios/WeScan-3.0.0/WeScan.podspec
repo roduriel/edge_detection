@@ -16,5 +16,6 @@ Pod::Spec.new do |spec|
   spec.swift_version = '5.0'
   spec.ios.deployment_target = '13.0'
   spec.source_files = 'Sources/WeScan/**/*.{h,m,swift}'
-  spec.resources = 'Sources/WeScan/**/*.{strings,png}'
+  # PNGs from Sources; only es.lproj at pod root to avoid duplicate Localizable.strings in Xcode
+  spec.resources = 'Sources/WeScan/**/*.png', 'es.lproj/**/*.strings'
 end
